@@ -1,14 +1,14 @@
 // REDUCER
-const counterReducer = (state = 0, action) => {
+const loadingReducer = (state = false, action) => {
     switch (action.type) {
-        case "INCREMENT":
-            return state + action.payload;
-        case "DECREMENT":
-            return state - 1;
-        default: 
+        case "LOADING_START":
+            return state = true
+        case "LOADING_END":
+            return state = false
+        default:
             return state;
 
     }
 }
 
-export default counterReducer;
+export default loadingReducer;

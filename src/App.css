@@ -36,3 +36,16 @@
     transform: rotate(360deg);
   }
 }
+
+
+.logo {
+  width: 80px;
+  height: 31px;
+  float: left;
+}
+
+.site-layout-background {
+  background: #fff;
+}
+
+
