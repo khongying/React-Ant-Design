@@ -1,6 +1,5 @@
 import React from 'react';
 import {Form, Input, InputNumber, Button} from 'antd';
-import API from '../../services/api';
 import {toastNotification} from "../../actions/toast";
 import {useDispatch} from "react-redux";
 import {loadingEnd, loadingStart} from "../../actions";

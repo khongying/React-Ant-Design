@@ -8,8 +8,21 @@ function HomeComponent() {
     const employees = useSelector(state => state.employees.employees);
     const dispatch = useDispatch();
     useEffect(() => {
-        getEmployees().then()
-    }, [])
+        const getEmployees = async () => {
+            const data = await API.get(`api/v1/employees`).then((res => {
+                if (res.status === 200) {
+                    return res.data.data
+                } else {
+                    return []
+                }
+            })).catch(err => {
+                console.error(err)
+                return []
+            })
+            dispatch(fetchEmployees(data))
+        };
+        getEmployees().then();
+    }, [dispatch])
 
     const pagination = {
         pageSize: 5,
@@ -33,19 +46,19 @@ function HomeComponent() {
         }
     ];
 
-    const getEmployees = async () => {
-        const data = await API.get(`api/v1/employees`).then((res => {
-            if (res.status === 200) {
-                return res.data.data
-            } else {
-                return []
-            }
-        })).catch(err => {
-            console.error(err)
-            return []
-        })
-        dispatch(fetchEmployees(data))
-    }
+    // const getEmployees = async () => {
+    //     const data = await API.get(`api/v1/employees`).then((res => {
+    //         if (res.status === 200) {
+    //             return res.data.data
+    //         } else {
+    //             return []
+    //         }
+    //     })).catch(err => {
+    //         console.error(err)
+    //         return []
+    //     })
+    //     dispatch(fetchEmployees(data))
+    // }
 
     return (
         <div>

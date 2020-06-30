@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import './App.css';
 import MainComponent from './layout/Main';
 import {useSelector} from "react-redux";
