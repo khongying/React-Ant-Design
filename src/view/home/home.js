@@ -1,76 +1,73 @@
-import React, {useEffect} from 'react';
+import React from 'react';
+import API from '../../services/api';
 import {Table} from 'antd';
-import {useSelector, useDispatch} from 'react-redux';
-import {fetchEmployees} from "../../actions/employees";
-import API from '../../services/api'
 
-function HomeComponent() {
-    const employees = useSelector(state => state.employees.employees);
-    const dispatch = useDispatch();
-    useEffect(() => {
-        const getEmployees = async () => {
-            const data = await API.get(`api/v1/employees`).then((res => {
-                if (res.status === 200) {
-                    return res.data.data
-                } else {
-                    return []
-                }
-            })).catch(err => {
-                console.error(err)
-                return []
-            })
-            dispatch(fetchEmployees(data))
-        };
-        getEmployees().then();
-    }, [dispatch])
-
-    const pagination = {
-        pageSize: 5,
+export default class HomeComponent extends React.Component {
+    constructor(props) {
+        super(props);
+        // Don't call this.setState() here!
+        this.state = {members: []};
+        console.log(this.state)
     }
 
-    const columns = [
-        {
-            title: 'Name',
-            dataIndex: 'employee_name',
-            width: '20%',
-        },
-        {
-            title: 'Age',
-            dataIndex: 'employee_age',
-            width: '20%',
-        },
-        {
-            title: 'Salary',
-            dataIndex: 'employee_salary',
-            width: '20%',
+    async componentDidMount() {
+        console.log('componentDidMount')
+        await this.getMember();
+    }
+
+    async getMember() {
+        await API.get(`api/users?page=2`).then((res => {
+            if (res.status === 200) {
+                this.setState({
+                    members: res.data.data
+                })
+                console.log(this.state.members)
+            } else {
+                this.setState({
+                    members: []
+                })
+            }
+        })).catch(err => {
+            console.error(err)
+            this.setState({
+                members: []
+            })
+        })
+    }
+
+    render() {
+
+        const pagination = {
+            pageSize: 5,
         }
-    ];
 
-    // const getEmployees = async () => {
-    //     const data = await API.get(`api/v1/employees`).then((res => {
-    //         if (res.status === 200) {
-    //             return res.data.data
-    //         } else {
-    //             return []
-    //         }
-    //     })).catch(err => {
-    //         console.error(err)
-    //         return []
-    //     })
-    //     dispatch(fetchEmployees(data))
-    // }
-
-    return (
-        <div>
-            <Table
-                dataSource={employees}
-                rowKey={record => record.id}
-                columns={columns}
-                pagination={pagination}
-            >
-            </Table>
-        </div>
-    );
+        const columns = [
+            {
+                title: 'First name',
+                dataIndex: 'first_name',
+                width: '20%',
+            },
+            {
+                title: 'Last name',
+                dataIndex: 'last_name',
+                width: '20%',
+            },
+            {
+                title: 'Email',
+                dataIndex: 'email',
+                width: '20%',
+            }
+        ];
+        return (
+            <div>
+                <Table
+                    dataSource={this.state.members}
+                    rowKey={record => record.id}
+                    columns={columns}
+                    pagination={pagination}
+                >
+                </Table>
+            </div>
+        )
+    }
 }
-
-export default HomeComponent;
